@@ -83,7 +83,7 @@ function Registries() {
 		if (prevValues && values !== prevValues) {
 			fetchData();
 		}
-	}, [values]);
+	}, [isEditing, prevValues, refetch, updateCitizen, values]);
 
 	const normalizeString = (str) => {
 		return str
