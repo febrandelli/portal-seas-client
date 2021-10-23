@@ -19,7 +19,7 @@ export function CitizenForm({
 	allRequired,
 	shouldClearValues,
 	editValues,
-	clearFunction
+	clearFunction,
 }) {
 	const [values, setValues] = useState({});
 	const { data: sexData } = useListSexQuery();

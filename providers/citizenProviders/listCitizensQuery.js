@@ -20,6 +20,6 @@ export function useListCitizensQuery(page, values) {
 		});
 	};
 	return useQuery('listCitizens', listCitizens, {
-		refetchOnWindowFocus: false
+		refetchOnWindowFocus: false,
 	});
 }

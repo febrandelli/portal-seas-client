@@ -34,18 +34,24 @@ export async function Requests(options) {
 				)
 			);
 			const params = new URLSearchParams(searchParams);
-			const arrayInParams = Object.keys(searchParams).filter(i => Array.isArray(searchParams[i]))
-			if(arrayInParams) {
-				arrayInParams.forEach(el => {
-					params.delete(el)
-					searchParams[el].forEach(element => params.append(el, element))
-				})
+			const arrayInParams = Object.keys(searchParams).filter((i) =>
+				Array.isArray(searchParams[i])
+			);
+			if (arrayInParams) {
+				arrayInParams.forEach((el) => {
+					params.delete(el);
+					searchParams[el].forEach((element) => params.append(el, element));
+				});
 			}
 			url.search = params.toString();
 		}
 		const res = await fetch(url.toString(), init);
 		const resText = await res.text();
-		return { data: resText ? JSON.parse(resText) : {}, success: res.ok, status: res.status };
+		return {
+			data: resText ? JSON.parse(resText) : {},
+			success: res.ok,
+			status: res.status,
+		};
 	} catch (err) {
 		if (err.response) {
 			return err.response;

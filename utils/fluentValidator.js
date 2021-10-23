@@ -18,18 +18,18 @@ const getIdsOnly = (array) => {
 };
 
 const handleDates = (date) => {
-	if(!verifyValue(date) && Array.isArray(date)) {
+	if (!verifyValue(date) && Array.isArray(date)) {
 		return new Date(date[0], date[1] - 1, date[2]).toISOString().split('T')[0];
 	}
 	return date;
-}
+};
 
 const handleGetOut = (getOut) => {
-	if(getOut !== undefined) {
-		return getOut === "Sim"
+	if (getOut !== undefined) {
+		return getOut === 'Sim';
 	}
 	return getOut;
-}
+};
 
 export const convertValues = (values, send) => {
 	if (send) {

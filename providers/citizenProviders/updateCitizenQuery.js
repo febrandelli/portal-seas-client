@@ -12,6 +12,6 @@ export function useUpdateCitizenQuery(values) {
 		});
 	};
 	return useQuery('updateCitizen', updateCitizen, {
-		enabled: false
+		enabled: false,
 	});
 }

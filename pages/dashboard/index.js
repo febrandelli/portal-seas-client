@@ -50,7 +50,6 @@ function Dashboard() {
 		setValues({});
 	};
 
-
 	return (
 		<>
 			<Loading show={loading} />
