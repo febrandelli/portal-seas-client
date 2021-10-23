@@ -19,6 +19,7 @@ export function CitizenForm({
 	allRequired,
 	shouldClearValues,
 	editValues,
+	clearFunction
 }) {
 	const [values, setValues] = useState({});
 	const { data: sexData } = useListSexQuery();
@@ -40,6 +41,7 @@ export function CitizenForm({
 
 	const clearValues = () => {
 		setValues({});
+		clearFunction();
 	};
 
 	useEffect(() => {

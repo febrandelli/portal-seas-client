@@ -8,6 +8,7 @@ export function useListCitizensQuery(page, values) {
 		page = page - 1;
 	}
 	values = convertValues(values, true);
+	delete values.id;
 	const listCitizens = async () => {
 		return Requests({
 			url: 'cidadao',
@@ -18,5 +19,7 @@ export function useListCitizensQuery(page, values) {
 			},
 		});
 	};
-	return useQuery('listCitizens', listCitizens, {});
+	return useQuery('listCitizens', listCitizens, {
+		refetchOnWindowFocus: false
+	});
 }

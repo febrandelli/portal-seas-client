@@ -46,6 +46,11 @@ function Dashboard() {
 		setValues(formValues);
 	};
 
+	const clearValues = () => {
+		setValues({});
+	};
+
+
 	return (
 		<>
 			<Loading show={loading} />
@@ -68,6 +73,7 @@ function Dashboard() {
 						submitFunction={handleSubmit}
 						allRequired={true}
 						shouldClearValues={clear}
+						clearFunction={clearValues}
 					/>
 				</div>
 			</div>

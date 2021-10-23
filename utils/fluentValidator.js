@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+
 export const verifyValue = (value) => {
 	return [
 		null,
@@ -15,30 +17,46 @@ const getIdsOnly = (array) => {
 	return newArray;
 };
 
+const handleDates = (date) => {
+	if(!verifyValue(date) && Array.isArray(date)) {
+		return new Date(date[0], date[1] - 1, date[2]).toISOString().split('T')[0];
+	}
+	return date;
+}
+
+const handleGetOut = (getOut) => {
+	if(getOut !== undefined) {
+		return getOut === "Sim"
+	}
+	return getOut;
+}
+
 export const convertValues = (values, send) => {
 	if (send) {
 		return {
+			id: values.id,
 			beneficios: values.benefits,
 			casosEspeciais: values.especialCases,
 			cidadeNascimento: values.city,
 			cor: values.color,
-			dataNascimento: values.birthday,
+			dataNascimento: handleDates(values.birthday),
 			fonteDeRenda: values.incomingSource,
 			motivos: values.reasons,
 			nome: values.name,
 			precisaParaSairRua: values.getOutReasons,
-			querSairDasRuas: values.getOut,
+			querSairDasRuas: handleGetOut(values.getOut),
 			sexo: values.sex,
 		};
 	}
 	return {
+		id: values.id,
 		benefits: getIdsOnly(values.beneficios),
 		especialCases: getIdsOnly(values.casosEspeciais),
 		city: values.cidadeNascimento.id,
 		name: values.nome,
 		sex: values.sexo.id,
 		color: values.cor.id,
-		birthday: values.dataNascimento,
+		birthday: handleDates(values.dataNascimento),
 		state: values.cidadeNascimento.estado.id,
 		incomingSource: values.fonteDeRenda.id,
 		getOutReasons: values.precisaParaSairRua,
@@ -48,3 +66,11 @@ export const convertValues = (values, send) => {
 		hasBenefits: values.beneficios.length > 0 ? 'Sim' : 'Não',
 	};
 };
+
+export function usePrevious(value) {
+	const ref = useRef();
+	useEffect(() => {
+		ref.current = value;
+	});
+	return ref.current;
+}
