@@ -1,7 +1,13 @@
 import { useListCitizensQuery } from '../../providers/citizenProviders/listCitizensQuery';
 import Head from 'next/head';
 import { Alert, Description, Loading } from '../../components';
-import { normalizeString, withAuth, usePrevious, convertValues, getAge } from '../../utils';
+import {
+	normalizeString,
+	withAuth,
+	usePrevious,
+	convertValues,
+	getAge,
+} from '../../utils';
 import { useEffect, useState } from 'react';
 import { Pagination } from '../../components/list/pagination';
 import { ListItem } from '../../components/list/listItem';

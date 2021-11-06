@@ -9,7 +9,6 @@ export const verifyValue = (value) => {
 	].includes(value);
 };
 
-
 export const normalizeString = (str) => {
 	return str
 		.toString()

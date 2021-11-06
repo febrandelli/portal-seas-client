@@ -9,9 +9,9 @@ const listColors = async () => {
 };
 
 export async function getStaticProps() {
-	console.log("StaticProps");
-	const colors = listColors()
-	return { props: { colors } }
+	console.log('StaticProps');
+	const colors = listColors();
+	return { props: { colors } };
 }
 
 export function useListColorsQuery(props) {
