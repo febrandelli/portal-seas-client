@@ -1,7 +1,7 @@
 import { Requests } from '../../utils';
 import { useQuery } from 'react-query';
 
-export function useListStatesQuery(props) {
+export function useListStatesQuery() {
 	const listStates = async () => {
 		return Requests({
 			url: 'estado',

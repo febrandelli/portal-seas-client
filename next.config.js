@@ -3,4 +3,7 @@ module.exports = {
 	images: {
 		domains: ['avatars.dicebear.com'],
 	},
+	eslint: {
+		dirs: ['pages', 'components', 'utils', 'providers']
+	}
 };

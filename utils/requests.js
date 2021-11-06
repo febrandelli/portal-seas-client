@@ -27,9 +27,9 @@ export async function Requests(options) {
 			};
 		}
 		if (options.params) {
-			// eslint-disable-next-line no-unused-vars
 			const searchParams = Object.fromEntries(
 				Object.entries(options.params).filter(
+					// eslint-disable-next-line no-unused-vars
 					([_, v]) => v !== null && v !== undefined
 				)
 			);

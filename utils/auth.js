@@ -38,6 +38,7 @@ export function GetCookie(name) {
 }
 
 export function withAuth(Component) {
+	// eslint-disable-next-line react/display-name
 	return (pageProps) => {
 		const [isLoggedIn, setLoginStatus] = useState(false);
 		const { refetch } = useListSexQuery();
