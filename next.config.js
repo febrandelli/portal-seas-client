@@ -4,6 +4,6 @@ module.exports = {
 		domains: ['avatars.dicebear.com'],
 	},
 	eslint: {
-		dirs: ['pages', 'components', 'utils', 'providers']
-	}
+		dirs: ['pages', 'components', 'utils', 'providers'],
+	},
 };
