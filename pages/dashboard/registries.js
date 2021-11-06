@@ -1,7 +1,7 @@
 import { useListCitizensQuery } from '../../providers/citizenProviders/listCitizensQuery';
 import Head from 'next/head';
 import { Alert, Description, Loading } from '../../components';
-import { convertValues, usePrevious, withAuth } from '../../utils';
+import { normalizeString, withAuth, usePrevious, convertValues, getAge } from '../../utils';
 import { useEffect, useState } from 'react';
 import { Pagination } from '../../components/list/pagination';
 import { ListItem } from '../../components/list/listItem';
@@ -84,30 +84,6 @@ function Registries() {
 			fetchData();
 		}
 	}, [isEditing, prevValues, refetch, updateCitizen, values]);
-
-	const normalizeString = (str) => {
-		return str
-			.toString()
-			.toLowerCase()
-			.normalize('NFD')
-			.replace(/[\u0300-\u036f]/g, '')
-			.replace(/ /g, '');
-	};
-
-	const getAge = (year) => {
-		const today = new Date();
-		const birthDate = new Date(...year);
-		const yearsDifference = today.getFullYear() - birthDate.getFullYear();
-		if (
-			(today.getMonth() < birthDate.getMonth() ||
-				(today.getMonth() === birthDate.getMonth() &&
-					today.getDate() < birthDate.getDate())) &&
-			yearsDifference >= 1
-		) {
-			return (yearsDifference - 1).toString();
-		}
-		return yearsDifference.toString();
-	};
 
 	const filteredCitizensList = (searchValue) => {
 		return data.data.content.filter((item) => {
