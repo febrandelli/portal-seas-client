@@ -9,14 +9,13 @@ const listColors = async () => {
 };
 
 export async function getStaticProps() {
-	console.log('StaticProps');
-	const colors = listColors();
-	return { props: { colors } };
+	const request = await listColors.data;
+	return { props: { request }, revalidate: 60 };
 }
 
-export function useListColorsQuery(props) {
+export function UseListColorsQuery(props) {
 	return useQuery('listColors', listColors, {
 		refetchOnWindowFocus: false,
-		initialData: props.colors,
+		initialData: props.request,
 	});
 }

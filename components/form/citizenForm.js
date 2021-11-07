@@ -3,12 +3,12 @@ import {
 	useIncomeSourcesQuery,
 	useListBenefitsQuery,
 	useListCitiesQuery,
+	UseListColorsQuery,
 	useListEspecialCasesQuery,
 	useListReasonsQuery,
 	useListSexQuery,
 	useListStatesQuery,
 } from '../../providers';
-import { useQuery } from 'react-query';
 import { verifyValue } from '../../utils';
 import { Input } from './input';
 import { SelectComponent } from './select';
@@ -23,7 +23,7 @@ export function CitizenForm({
 }) {
 	const [values, setValues] = useState({});
 	const { data: sexData } = useListSexQuery();
-	const { data: colorsData } = useQuery('listColors');
+	const { data: colorsData } = UseListColorsQuery();
 	const { data: reasonsData } = useListReasonsQuery();
 	const { data: benefitsData } = useListBenefitsQuery();
 	const { data: especialCasesData } = useListEspecialCasesQuery();
@@ -86,8 +86,8 @@ export function CitizenForm({
 		<>
 			<div className='md:col-span-3'>
 				<form onSubmit={(e) => submitFunction(e, values)}>
-					<div className='overflow-hidden mt-4 shadow sm:rounded-md md:mt-0 md:mr-8'>
-						<div className='px-4 py-5 bg-white sm:p-6 h-full'>
+					<div className='mt-4 overflow-hidden shadow sm:rounded-md md:mt-0 md:mr-8'>
+						<div className='h-full px-4 py-5 bg-white sm:p-6'>
 							<div className='grid grid-cols-6 gap-6'>
 								<Input
 									name='name'
@@ -105,7 +105,7 @@ export function CitizenForm({
 									value={values.lastName}
 									required={allRequired}
 									handleChange={handleChangeInput}
-									size='md:col-span-3'
+									size='md:colrspan-3'
 								/>
 								<SelectComponent
 									label='Sexo'
@@ -133,7 +133,7 @@ export function CitizenForm({
 										onChange={handleChangeInput}
 										required={allRequired}
 										value={values.birthday === undefined ? '' : values.birthday}
-										className='block mt-1 w-full rounded-md border-gray-300 shadow-sm cursor-pointer focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+										className='block w-full mt-1 border-gray-300 cursor-pointer rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
 									/>
 								</div>
 								<SelectComponent
@@ -242,13 +242,13 @@ export function CitizenForm({
 							<button
 								type='button'
 								onClick={() => clearValues()}
-								className='inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-gray-700 rounded-md border border-transparent shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-3'
+								className='inline-flex justify-center px-4 py-2 mr-3 text-sm font-medium text-white bg-gray-700 border border-transparent rounded-md shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
 							>
 								Limpar
 							</button>
 							<button
 								type='submit'
-								className='inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-gray-700 rounded-md border border-transparent shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+								className='inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-gray-700 border border-transparent rounded-md shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
 							>
 								{buttonText ? buttonText : 'Cadastrar'}
 							</button>
