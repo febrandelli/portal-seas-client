@@ -29,16 +29,19 @@ export function Alert(props) {
 		show && (
 			<div
 				className='flex justify-center items-center cursor-pointer'
-				onClick={props.func}>
+				onClick={props.func}
+			>
 				<div className='flex fixed z-40 justify-center items-center mt-40 md:w-full md:bottom-0 md:right-0 md:m-8 sm:max-w-sm'>
 					<div className='flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800'>
 						<div
 							className='flex items-center justify-center w-12'
-							style={{ backgroundColor: color }}>
+							style={{ backgroundColor: color }}
+						>
 							<svg
 								className='w-6 h-6 text-white fill-current'
 								viewBox='0 0 40 40'
-								xmlns='http://www.w3.org/2000/svg'>
+								xmlns='http://www.w3.org/2000/svg'
+							>
 								<path d={path} />
 							</svg>
 						</div>

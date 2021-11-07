@@ -34,7 +34,8 @@ export default function ForgotPassword() {
 							</p>
 							<form
 								onSubmit={handleSubmit}
-								className='pt-6 pb-8 mb-4 rounded bg-grey-50'>
+								className='pt-6 pb-8 mb-4 rounded bg-grey-50'
+							>
 								<div className='mb-4'>
 									<label className='block mb-2 text-sm font-bold text-gray-700'>
 										Email
@@ -52,7 +53,8 @@ export default function ForgotPassword() {
 								<div className='mb-6 text-center'>
 									<button
 										className='py-2 px-4 w-full font-bold text-white bg-blue-600 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline'
-										type='submit'>
+										type='submit'
+									>
 										Resetar a senha
 									</button>
 								</div>
