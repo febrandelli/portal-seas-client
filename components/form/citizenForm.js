@@ -12,7 +12,7 @@ import {
 import { verifyValue } from '../../utils';
 import { Input } from './input';
 import { SelectComponent } from './select';
-
+import { useQuery } from 'react-query';
 export function CitizenForm({
 	submitFunction,
 	buttonText,
@@ -23,7 +23,7 @@ export function CitizenForm({
 }) {
 	const [values, setValues] = useState({});
 	const { data: sexData } = useListSexQuery();
-	const { data: colorsData } = useListColorsQuery();
+	const { data: colorsData } = useQuery('listColors');
 	const { data: reasonsData } = useListReasonsQuery();
 	const { data: benefitsData } = useListBenefitsQuery();
 	const { data: especialCasesData } = useListEspecialCasesQuery();
