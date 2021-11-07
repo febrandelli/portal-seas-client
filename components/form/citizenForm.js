@@ -23,7 +23,7 @@ export function CitizenForm({
 }) {
 	const [values, setValues] = useState({});
 	const { data: sexData } = useListSexQuery();
-	const { data: colorsData } = useQuery('listColors'); 
+	const { data: colorsData } = useQuery('listColors');
 	const { data: reasonsData } = useListReasonsQuery();
 	const { data: benefitsData } = useListBenefitsQuery();
 	const { data: especialCasesData } = useListEspecialCasesQuery();
@@ -242,12 +242,14 @@ export function CitizenForm({
 							<button
 								type='button'
 								onClick={() => clearValues()}
-								className='inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-gray-700 rounded-md border border-transparent shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-3'>
+								className='inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-gray-700 rounded-md border border-transparent shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-3'
+							>
 								Limpar
 							</button>
 							<button
 								type='submit'
-								className='inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-gray-700 rounded-md border border-transparent shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
+								className='inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-gray-700 rounded-md border border-transparent shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+							>
 								{buttonText ? buttonText : 'Cadastrar'}
 							</button>
 						</div>
