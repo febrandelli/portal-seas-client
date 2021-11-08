@@ -1,9 +1,7 @@
 //Libs
 import { useEffect, useState } from 'react';
-//Aux
-import { withAuth } from '../../utils';
 //Components
-import { Alert, Description, Loading } from '../../components';
+import { Alert, Description, Loading, NavBar } from '../../components';
 import Head from 'next/head';
 import { useCreateCitizenQuery } from '../../providers/citizenProviders/createCitizenQuery';
 import { CitizenForm } from '../../components/form';
@@ -52,6 +50,7 @@ function Dashboard() {
 
 	return (
 		<>
+			<NavBar />
 			<Loading show={loading} />
 			<Alert
 				show={alert.show}
@@ -80,4 +79,4 @@ function Dashboard() {
 	);
 }
 
-export default withAuth(Dashboard);
+export default Dashboard;

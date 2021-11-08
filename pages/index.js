@@ -1,5 +1,4 @@
-import Dashboard from './dashboard';
-
+import LoginPage from './login/loginPage';
 export default function Index() {
-	return <Dashboard />;
+	return <LoginPage />;
 }

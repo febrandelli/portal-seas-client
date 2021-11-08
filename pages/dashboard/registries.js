@@ -1,9 +1,8 @@
 import { useListCitizensQuery } from '../../providers/citizenProviders/listCitizensQuery';
 import Head from 'next/head';
-import { Alert, Description, Loading } from '../../components';
+import { Alert, Description, Loading, NavBar } from '../../components';
 import {
 	normalizeString,
-	withAuth,
 	usePrevious,
 	convertValues,
 	getAge,
@@ -140,6 +139,7 @@ function Registries() {
 
 	return (
 		<>
+			<NavBar />
 			<Loading show={loading} />
 			<Alert
 				show={alert.show}
@@ -229,4 +229,4 @@ function Registries() {
 	);
 }
 
-export default withAuth(Registries);
+export default Registries;

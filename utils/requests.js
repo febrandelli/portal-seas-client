@@ -1,25 +1,33 @@
 import { GetCookie } from './auth';
 
+export function initFetchConfig() {
+	const token = GetCookie(process.env.NEXT_PUBLIC_TOKEN).tokenValue;
+	let init = {
+		mode: 'cors',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	};
+	if (token) {
+		init = {
+			...init,
+			headers: {
+				Authorization: token,
+				...init.headers,
+			},
+		};
+	}
+	return init;
+}
+
 export async function Requests(options) {
 	try {
 		const url = new URL(process.env.NEXT_PUBLIC_API_URL + options.url);
-		const token = GetCookie(process.env.NEXT_PUBLIC_TOKEN);
-		let init = {
+		let init = initFetchConfig();
+		init = {
+			...init,
 			method: options.type,
-			mode: 'cors',
-			headers: {
-				'Content-Type': 'application/json',
-			},
 		};
-		if (token.tokenValue) {
-			init = {
-				...init,
-				headers: {
-					Authorization: token.tokenValue,
-					...init.headers,
-				},
-			};
-		}
 		if (options.body) {
 			init = {
 				...init,

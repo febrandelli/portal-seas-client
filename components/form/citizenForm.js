@@ -3,7 +3,7 @@ import {
 	useIncomeSourcesQuery,
 	useListBenefitsQuery,
 	useListCitiesQuery,
-	UseListColorsQuery,
+	useListColorsQuery,
 	useListEspecialCasesQuery,
 	useListReasonsQuery,
 	useListSexQuery,
@@ -23,7 +23,7 @@ export function CitizenForm({
 }) {
 	const [values, setValues] = useState({});
 	const { data: sexData } = useListSexQuery();
-	const { data: colorsData } = UseListColorsQuery();
+	const { data: colorsData } = useListColorsQuery();
 	const { data: reasonsData } = useListReasonsQuery();
 	const { data: benefitsData } = useListBenefitsQuery();
 	const { data: especialCasesData } = useListEspecialCasesQuery();
