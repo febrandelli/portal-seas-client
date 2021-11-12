@@ -105,7 +105,7 @@ export function CitizenForm({
 									value={values.lastName}
 									required={allRequired}
 									handleChange={handleChangeInput}
-									size='md:colrspan-3'
+									size='md:col-span-3'
 								/>
 								<SelectComponent
 									label='Sexo'

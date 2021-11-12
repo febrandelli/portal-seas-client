@@ -19,7 +19,7 @@ export function useListCitizensQuery(page, values) {
 			},
 		});
 	};
-	return useQuery('listCitizens', listCitizens, {
+	return useQuery(['listCitizens', page], listCitizens, {
 		refetchOnWindowFocus: false,
 	});
 }

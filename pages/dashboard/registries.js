@@ -32,8 +32,10 @@ function Registries() {
 	useEffect(() => {
 		if (isSuccess && data.success) {
 			setCitizensList(data.data.content);
-			setPages(data.data.totalPages);
+			return setPages(data.data.totalPages);
 		}
+		setCitizensList([]);
+		return setPages(1);
 	}, [isSuccess, data]);
 
 	useEffect(() => {
@@ -91,26 +93,29 @@ function Registries() {
 	}, [isEditing, prevValues, refetch, updateCitizen, values]);
 
 	const filteredCitizensList = (searchValue) => {
-		return data.data.content.filter((item) => {
-			if (
-				normalizeString(item.nome).includes(normalizeString(searchValue)) ||
-				normalizeString(item.cidadeNascimento.nome).includes(
-					normalizeString(searchValue)
-				) ||
-				normalizeString(item.cidadeNascimento.estado.nome).includes(
-					normalizeString(searchValue)
-				) ||
-				normalizeString(item.sexo.nomeclatura).includes(
-					normalizeString(searchValue)
-				) ||
-				normalizeString(item.cor.nomeclatura).includes(
-					normalizeString(searchValue)
-				) ||
-				getAge(item.dataNascimento).includes(searchValue)
-			) {
-				return item;
-			}
-		});
+		if (data.success) {
+			return data.data.content.filter((item) => {
+				if (
+					normalizeString(item.nome).includes(normalizeString(searchValue)) ||
+					normalizeString(item.cidadeNascimento.nome).includes(
+						normalizeString(searchValue)
+					) ||
+					normalizeString(item.cidadeNascimento.estado.nome).includes(
+						normalizeString(searchValue)
+					) ||
+					normalizeString(item.sexo.nomeclatura).includes(
+						normalizeString(searchValue)
+					) ||
+					normalizeString(item.cor.nomeclatura).includes(
+						normalizeString(searchValue)
+					) ||
+					getAge(item.dataNascimento).includes(searchValue)
+				) {
+					return item;
+				}
+			});
+		}
+		return {};
 	};
 
 	const handleInput = (e) => {
@@ -148,13 +153,13 @@ function Registries() {
 				type={alert.type}
 			/>
 			<Head>
-				<title>Cadastro de Cidadão</title>
+				<title>Gestão de Cidadãos</title>
 			</Head>
 			<div className='justify-center items-center mt-5'>
 				<div className='md:grid md:grid-cols-3'>
 					<div>
 						<Description
-							title='Listagem de cidadão'
+							title='Gestão de Cidadãos'
 							desc='Procure cidadãos e edite registros.'
 						/>
 						<div className='sm:ml-7 mt-2'>
