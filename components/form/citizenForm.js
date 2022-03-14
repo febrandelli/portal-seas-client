@@ -174,7 +174,7 @@ export function CitizenForm({
 								/>
 								<SelectComponent
 									label='Quer sair das ruas?'
-									size='sm:col-span-2'
+									size='lg:col-span-3'
 									handleChange={(e) => handleChangeSelect(e, 'getOut')}
 									options={'yesAndNo'}
 									required={allRequired}
@@ -182,7 +182,7 @@ export function CitizenForm({
 								/>
 								<SelectComponent
 									label='Motivos para estar na rua:'
-									size='lg:col-span-4'
+									size='lg:col-span-3'
 									handleChange={(e) => handleChangeSelect(e, 'reasons')}
 									options={reasonsData}
 									isMulti
@@ -191,7 +191,7 @@ export function CitizenForm({
 								/>
 								<SelectComponent
 									label='Caso especial?'
-									size='sm:col-span-2'
+									size='lg:col-span-3'
 									handleChange={(e) => handleChangeSelect(e, 'isEspecialCase')}
 									options={'yesAndNo'}
 									required={allRequired}
@@ -199,7 +199,7 @@ export function CitizenForm({
 								/>
 								<SelectComponent
 									label='Se sim, quais casos?'
-									size='lg:col-span-4'
+									size='lg:col-span-3'
 									handleChange={(e) => handleChangeSelect(e, 'especialCases')}
 									options={especialCasesData}
 									isDisabled={verifyValue(values.isEspecialCase)}
@@ -216,7 +216,7 @@ export function CitizenForm({
 								/>
 								<SelectComponent
 									label='Recebe benefício?'
-									size='sm:col-span-2'
+									size='lg:col-span-3'
 									handleChange={(e) => handleChangeSelect(e, 'hasBenefits')}
 									options={'yesAndNo'}
 									required={allRequired}
@@ -224,7 +224,7 @@ export function CitizenForm({
 								/>
 								<SelectComponent
 									label='Se sim, quais benefícios?'
-									size='lg:col-span-4'
+									size='lg:col-span-3'
 									handleChange={(e) => handleChangeSelect(e, 'benefits')}
 									options={benefitsData}
 									isDisabled={verifyValue(values.hasBenefits)}

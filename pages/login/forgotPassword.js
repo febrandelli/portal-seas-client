@@ -1,27 +1,38 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Alert } from '../../components';
+import { useResetPassword } from '../../providers/';
 
 export default function ForgotPassword() {
 	const [email, setEmail] = useState();
-	const [alert, setAlert] = useState(false);
+	const [alert, setAlert] = useState({ show: false });
+	const { refetch } = useResetPassword(email);
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		setAlert(true);
-	};
-
-	const handleShow = () => {
-		setAlert(!alert);
+		const newFetch = await refetch();
+		if (newFetch.data.status === 200 && newFetch.isSuccess) {
+			setAlert({
+				show: true,
+				type: 'Sucesso',
+				label: 'Nova senha enviada com sucesso.',
+			});
+		} else {
+			setAlert({
+				show: true,
+				label: 'Não foi possível enviar a senha, tente novamente mais tarde.',
+				type: 'Erro',
+			});
+		}
 	};
 
 	return (
 		<>
 			<Alert
-				show={alert}
-				func={handleShow}
-				label='Uma nova senha foi enviada ao seu email.'
-				color='blue'
+				show={alert.show}
+				func={() => setAlert({ show: !alert.show })}
+				label={alert.label}
+				type={alert.type}
 			/>
 			<div className='flex justify-center items-center h-screen bg-gray-50'>
 				<div className='flex justify-center items-center'>

@@ -1,5 +1,7 @@
 //userProviders
 export * from './userProviders/loginQuery';
+export * from './userProviders/resestPasswordQuery';
+export * from './userProviders/listUsersQuery';
 
 //locationProviders
 export * from './locationProviders/listStatesQuery';

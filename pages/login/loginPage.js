@@ -18,7 +18,7 @@ export default function LoginPage() {
 	const [state, setState] = useState({ password: '', email: '' });
 	const [alert, setAlert] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const { refetch } = useLogin(state.password, state.email);
+	const { refetch } = useLogin(state.email, state.password);
 	const router = useRouter();
 
 	const handleChange = (event) => {
@@ -47,7 +47,7 @@ export default function LoginPage() {
 			<Loading show={loading} />
 			<Alert
 				show={alert}
-				func={() => setAlert({ show: !alert.show })}
+				func={() => setAlert(!alert)}
 				label='Email e/ou senha inválido(s).'
 				type={'Erro'}
 			/>
