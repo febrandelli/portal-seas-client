@@ -95,7 +95,7 @@ export function SelectComponent(props) {
 					position: 'absolute',
 				}}
 				required={props.required}
-				value={props.value ? props.value : ''}
+				defaultValue={props.value ? props.value : ''}
 			/>
 		</div>
 	);
