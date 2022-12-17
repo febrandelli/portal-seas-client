@@ -9,6 +9,7 @@ import {
 	useListSexQuery,
 	useListStatesQuery,
 } from '../../providers';
+import { useListDocumentType } from '../../providers/citizenProviders/listDocumentType';
 import { verifyValue } from '../../utils';
 import { Input } from './input';
 import { SelectComponent } from './select';
@@ -23,6 +24,7 @@ export function CitizenForm({
 }) {
 	const [values, setValues] = useState({});
 	const { data: sexData } = useListSexQuery();
+	const { data: documentTypeData } = useListDocumentType();
 	const { data: colorsData } = useListColorsQuery();
 	const { data: reasonsData } = useListReasonsQuery();
 	const { data: benefitsData } = useListBenefitsQuery();
@@ -103,6 +105,41 @@ export function CitizenForm({
 									label='Sobrenome'
 									type='text'
 									value={values.lastName}
+									required={allRequired}
+									handleChange={handleChangeInput}
+									size='md:col-span-3'
+								/>
+								<Input
+									name='nameFather'
+									label='Nome do pai'
+									type='text'
+									value={values.nameFather}
+									required={allRequired}
+									handleChange={handleChangeInput}
+									size='md:col-span-3'
+								/>
+								<Input
+									name='nameMother'
+									label='Nome da mae'
+									type='text'
+									value={values.nameMother}
+									required={allRequired}
+									handleChange={handleChangeInput}
+									size='md:col-span-3'
+								/>
+								<SelectComponent
+									label='Tipo Documento'
+									size='sm:col-span-2'
+									handleChange={(e) => handleChangeSelect(e, 'documentType')}
+									options={documentTypeData}
+									value={values.documentType}
+									required={allRequired}
+								/>
+								<Input
+									name='numberDocument'
+									label='Numero Documento'
+									type='text'
+									value={values.numberDocument}
 									required={allRequired}
 									handleChange={handleChangeInput}
 									size='md:col-span-3'
