@@ -1,30 +1,20 @@
 import { useEffect, useState } from 'react';
-import {
-	useIncomeSourcesQuery,
-	useListBenefitsQuery,
-	useListCitiesQuery,
-	useListColorsQuery,
-	useListEspecialCasesQuery,
-	useListReasonsQuery,
-	useListSexQuery,
-	useListStatesQuery,
-} from '../../providers';
-import { useListDocumentType } from '../../providers/citizenProviders/listDocumentType';
+import { useListCitiesQuery, useListStatesQuery } from '../../providers';
 import { useListReasonApproachsQuery } from '../../providers/quizProviders/listReasonApproachsQuery';
 import { useListServicesQuery } from '../../providers/quizProviders/listServicesQuery';
 import { useListTimeInJundiaiQuery } from '../../providers/quizProviders/listTimeInJundiaiQuery';
 import { useListTimeLivingOnTheStreetQuery } from '../../providers/quizProviders/listTimeLivingOnTheStreet';
 import { verifyValue } from '../../utils';
 import { Input } from './input';
-import { TextArea} from './textArea'
+import { TextArea } from './textArea';
 import { SelectComponent } from './select';
 import { useListCitzensNameQuery } from '../../providers/quizProviders/listCitzensNameQuery';
 import { useListModalitiesQuery } from '../../providers/quizProviders/listModalitiesQuery';
 import { useListSatisfactionQuery } from '../../providers/quizProviders/listSatisfactionQuery';
 
-export function QuizForm ({
-    submitFunction,
-    buttonText,
+export function QuizForm({
+	submitFunction,
+	buttonText,
 	allRequired,
 	shouldClearValues,
 	editValues,
@@ -33,7 +23,8 @@ export function QuizForm ({
 	const [values, setValues] = useState({});
 	const { data: reasonApproachData } = useListReasonApproachsQuery();
 	const { data: timeInJundiaiData } = useListTimeInJundiaiQuery();
-	const { data: timeLivingOnTheStreetData } = useListTimeLivingOnTheStreetQuery();
+	const { data: timeLivingOnTheStreetData } =
+		useListTimeLivingOnTheStreetQuery();
 	const { data: servicesData } = useListServicesQuery();
 	const { data: modalityData } = useListModalitiesQuery();
 	const { data: satisfactionData } = useListSatisfactionQuery();
@@ -42,8 +33,6 @@ export function QuizForm ({
 	const { data: citiesData, refetch: fetchCities } = useListCitiesQuery(
 		values['state']
 	);
-	const { data: incomingSourcesData } = useIncomeSourcesQuery();
-
 
 	useEffect(() => {
 		if (!verifyValue(values.state)) {
@@ -94,8 +83,8 @@ export function QuizForm ({
 		return auxValues[name];
 	};
 
-    return (
-    <>
+	return (
+		<>
 			<div className='md:col-span-3'>
 				<form onSubmit={(e) => submitFunction(e, values)}>
 					<div className='mt-4 overflow-hidden shadow sm:rounded-md md:mt-0 md:mr-8'>
@@ -166,7 +155,9 @@ export function QuizForm ({
 								<SelectComponent
 									label='Há quanto tempo vive em situação de rua?'
 									size='lg:col-span-3'
-									handleChange={(e) => handleChangeSelect(e, 'timeLivingOnTheStreet')}
+									handleChange={(e) =>
+										handleChangeSelect(e, 'timeLivingOnTheStreet')
+									}
 									options={timeLivingOnTheStreetData}
 									required={allRequired}
 									value={values.timeLivingOnTheStreet}
@@ -245,7 +236,9 @@ export function QuizForm ({
 								<SelectComponent
 									label='Nesta ação voce acionou algum outro serviço?'
 									size='lg:col-span-3'
-									handleChange={(e) => handleChangeSelect(e, 'isanotherService')}
+									handleChange={(e) =>
+										handleChangeSelect(e, 'isanotherService')
+									}
 									options={'yesAndNo'}
 									required={allRequired}
 									value={values.isanotherService}
@@ -314,5 +307,6 @@ export function QuizForm ({
 					</div>
 				</form>
 			</div>
-		</>);
+		</>
+	);
 }

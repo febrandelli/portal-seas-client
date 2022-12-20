@@ -8,7 +8,11 @@ export function useListTimeLivingOnTheStreetQuery() {
 			type: 'get',
 		});
 	};
-	return useQuery('listLivingOnTheStreetJundiai', listLivingOnTheStreetJundiai, {
-		refetchOnWindowFocus: false,
-	});
+	return useQuery(
+		'listLivingOnTheStreetJundiai',
+		listLivingOnTheStreetJundiai,
+		{
+			refetchOnWindowFocus: false,
+		}
+	);
 }
