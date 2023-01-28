@@ -1,8 +1,9 @@
-import Head from 'next/head';
 import { useEffect, useState } from 'react';
+
 import { Alert, Description, Loading, NavBar } from '../../components';
+import Head from 'next/head';
 import { QuizForm } from '../../components/form/quizForm';
-import { useCreateCitizenQuery } from '../../providers/citizenProviders/createCitizenQuery';
+import { useCreateQuizQuery } from '../../providers/quizProviders/createQuizQuery';
 
 function Quiz() {
 	const [values, setValues] = useState({});
@@ -10,11 +11,12 @@ function Quiz() {
 	const [alert, setAlert] = useState({ show: false });
 	const [clear, setClear] = useState(false);
 
-	const { refetch: createRefetch } = useCreateCitizenQuery(values);
+	const { refetch: createRefetch } = useCreateQuizQuery(values);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			const newFetch = await createRefetch();
+			console.log(newFetch);
 			if (newFetch.data.status === 200 && newFetch.isSuccess) {
 				setAlert({
 					show: true,
@@ -65,7 +67,7 @@ function Quiz() {
 					<Description title='Formulario de Abordagem' desc='Equipe SEAS.' />
 					<QuizForm
 						submitFunction={handleSubmit}
-						allRequired={true}
+						allRequired={false}
 						shouldClearValues={clear}
 						clearFunction={clearValues}
 					/>

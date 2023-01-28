@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useListCitiesQuery, useListStatesQuery } from '../../providers';
-import { useListReasonApproachsQuery } from '../../providers/quizProviders/listReasonApproachsQuery';
 import { useListServicesQuery } from '../../providers/quizProviders/listServicesQuery';
 import { useListTimeInJundiaiQuery } from '../../providers/quizProviders/listTimeInJundiaiQuery';
 import { useListTimeLivingOnTheStreetQuery } from '../../providers/quizProviders/listTimeLivingOnTheStreet';
@@ -21,12 +20,11 @@ export function QuizForm({
 	clearFunction,
 }) {
 	const [values, setValues] = useState({});
-	const { data: reasonApproachData } = useListReasonApproachsQuery();
+	const { data: reasonApproachData } = useListModalitiesQuery();
 	const { data: timeInJundiaiData } = useListTimeInJundiaiQuery();
 	const { data: timeLivingOnTheStreetData } =
 		useListTimeLivingOnTheStreetQuery();
 	const { data: servicesData } = useListServicesQuery();
-	const { data: modalityData } = useListModalitiesQuery();
 	const { data: satisfactionData } = useListSatisfactionQuery();
 	const { data: citzensData } = useListCitzensNameQuery();
 	const { data: statesData } = useListStatesQuery();
@@ -62,7 +60,7 @@ export function QuizForm({
 
 	const handleChangeSelect = (e, name) => {
 		const auxValues = { ...values };
-		if (e.length > 0) {
+		if (e && e.length > 0) {
 			auxValues[name] = [];
 			e.map((val) => {
 				auxValues[name].push(val.value);
@@ -106,15 +104,24 @@ export function QuizForm({
 									value={values.place}
 									handleChange={handleChangeInput}
 									required={allRequired}
-									size='col-span-3 md:col-span-3'
+									size='col-span-3 md:col-span-2'
 								/>
 								<SelectComponent
 									label='Motivo abordagem'
-									size='sm:col-span-3'
+									size='sm:col-span-2'
 									handleChange={(e) => handleChangeSelect(e, 'reasonApproach')}
 									options={reasonApproachData}
 									value={values.reasonApproach}
 									required={allRequired}
+								/>
+								<Input
+									name='reasonApproachNumber'
+									label='Numero do motivo:'
+									type='text'
+									value={values.reasonApproachNumber}
+									handleChange={handleChangeInput}
+									required={allRequired}
+									size='col-span-3 md:col-span-2'
 								/>
 								<SelectComponent
 									label='Estado de Origem'
@@ -189,14 +196,6 @@ export function QuizForm({
 									required={allRequired}
 									value={values.services}
 								/>
-								<SelectComponent
-									label='Modalidade'
-									size='sm:col-span-3'
-									handleChange={(e) => handleChangeSelect(e, 'modality')}
-									options={modalityData}
-									value={values.modality}
-									required={allRequired}
-								/>
 								<Input
 									name='compositeTeam'
 									label='Equipe composta por:'
@@ -225,10 +224,10 @@ export function QuizForm({
 									size='lg:col-span-3'
 								/>
 								<TextArea
-									name='lifeProject'
+									name='describe'
 									label='Descrição / Relato da abordagem:'
 									type='text'
-									value={values.lifeProject}
+									value={values.describe}
 									required={allRequired}
 									handleChange={handleChangeInput}
 									size='md:col-span-6'
