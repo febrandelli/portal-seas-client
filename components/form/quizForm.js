@@ -243,7 +243,7 @@ export function QuizForm({
 									value={values.isanotherService}
 								/>
 								<Input
-									name='anotherServices'
+									name='anotherService'
 									label='Se sim, qual serviço?'
 									type='text'
 									size='lg:col-span-3'
