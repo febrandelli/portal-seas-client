@@ -1,10 +1,10 @@
 import { Requests } from '../../utils';
 import { useQuery } from 'react-query';
 
-export function useCreateCitizenQuery(values) {
-	const createCitizen = async () => {
+export function useCreateQuizQuery(values) {
+	const createQuiz = async () => {
 		return Requests({
-			url: 'cidadao',
+			url: 'questionario',
 			type: 'post',
 			body: {
 				beneficios: values.benefits ? values.benefits : [],
@@ -25,7 +25,7 @@ export function useCreateCitizenQuery(values) {
 			},
 		});
 	};
-	return useQuery('createCitizen', createCitizen, {
+	return useQuery('createQuiz', createQuiz, {
 		enabled: false,
 	});
 }

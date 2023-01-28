@@ -1,16 +1,23 @@
 import { useListCitizensQuery } from '../../providers/citizenProviders/listCitizensQuery';
 import Head from 'next/head';
-import { Alert, Description, Loading } from '../../components';
-import { convertValues, withAuth } from '../../utils';
+import { Alert, Description, Loading, NavBar } from '../../components';
+import {
+	normalizeString,
+	usePrevious,
+	convertValues,
+	getAge,
+} from '../../utils';
 import { useEffect, useState } from 'react';
 import { Pagination } from '../../components/list/pagination';
 import { ListItem } from '../../components/list/listItem';
 import { CitizenForm } from '../../components/form';
+import { useUpdateCitizenQuery } from '../../providers/citizenProviders/updateCitizenQuery';
 
 function Registries() {
 	const [citizensList, setCitizensList] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [values, setValues] = useState({});
+	const prevValues = usePrevious(values);
 	const [editValues, setEditValues] = useState({});
 	const [alert, setAlert] = useState({ show: false });
 	const [pages, setPages] = useState(1);
@@ -20,12 +27,15 @@ function Registries() {
 		selectedPage,
 		values
 	);
+	const { refetch: updateCitizen } = useUpdateCitizenQuery(values);
 
 	useEffect(() => {
 		if (isSuccess && data.success) {
 			setCitizensList(data.data.content);
-			setPages(data.data.totalPages);
+			return setPages(data.data.totalPages);
 		}
+		setCitizensList([]);
+		return setPages(1);
 	}, [isSuccess, data]);
 
 	useEffect(() => {
@@ -37,67 +47,75 @@ function Registries() {
 		fetchNewPage();
 	}, [refetch, selectedPage]);
 
+	const isEditing = () => {
+		return Object.keys(editValues).length > 0;
+	};
+
+	const clearValues = () => {
+		setValues({});
+		setEditValues({});
+	};
+
 	useEffect(() => {
 		const fetchData = async () => {
 			setLoading(true);
+			if (isEditing() && values.name) {
+				const updateCitizenFetch = await updateCitizen();
+				if (updateCitizenFetch.data.success) {
+					setAlert({
+						show: true,
+						label: 'Cidadão editado com sucesso.',
+						type: 'Sucesso',
+					});
+				} else {
+					setAlert({
+						show: true,
+						label: 'Não foi possível editar o cidadão.',
+					});
+				}
+			}
 			const newFetch = await refetch();
-			if (newFetch.data.status !== 200 || newFetch.isError) {
+			if (!newFetch.data.success && !isEditing()) {
 				setAlert({
 					show: true,
-					label: 'Não foi possível buscar pelos cidadãos.',
+					label:
+						newFetch.data.status === 404
+							? 'Nenhum cidadão encontrado.'
+							: 'Não foi possível buscar pelos cidadãos.',
 					type: 'Erro',
 				});
 			}
 			setLoading(false);
 		};
-		fetchData();
-	}, [refetch, values]);
-
-	const normalizeString = (str) => {
-		return str
-			.toString()
-			.toLowerCase()
-			.normalize('NFD')
-			.replace(/[\u0300-\u036f]/g, '')
-			.replace(/ /g, '');
-	};
-
-	const getAge = (year) => {
-		const today = new Date();
-		const birthDate = new Date(...year);
-		const yearsDifference = today.getFullYear() - birthDate.getFullYear();
-		if (
-			(today.getMonth() < birthDate.getMonth() ||
-				(today.getMonth() === birthDate.getMonth() &&
-					today.getDate() < birthDate.getDate())) &&
-			yearsDifference >= 1
-		) {
-			return (yearsDifference - 1).toString();
+		if (prevValues && values !== prevValues) {
+			fetchData();
 		}
-		return yearsDifference.toString();
-	};
+	}, [isEditing, prevValues, refetch, updateCitizen, values]);
 
 	const filteredCitizensList = (searchValue) => {
-		return data.data.content.filter((item) => {
-			if (
-				normalizeString(item.nome).includes(normalizeString(searchValue)) ||
-				normalizeString(item.cidadeNascimento.nome).includes(
-					normalizeString(searchValue)
-				) ||
-				normalizeString(item.cidadeNascimento.estado.nome).includes(
-					normalizeString(searchValue)
-				) ||
-				normalizeString(item.sexo.nomeclatura).includes(
-					normalizeString(searchValue)
-				) ||
-				normalizeString(item.cor.nomeclatura).includes(
-					normalizeString(searchValue)
-				) ||
-				getAge(item.dataNascimento).includes(searchValue)
-			) {
-				return item;
-			}
-		});
+		if (data.success) {
+			return data.data.content.filter((item) => {
+				if (
+					normalizeString(item.nome).includes(normalizeString(searchValue)) ||
+					normalizeString(item.cidadeNascimento.nome).includes(
+						normalizeString(searchValue)
+					) ||
+					normalizeString(item.cidadeNascimento.estado.nome).includes(
+						normalizeString(searchValue)
+					) ||
+					normalizeString(item.sexo.nomeclatura).includes(
+						normalizeString(searchValue)
+					) ||
+					normalizeString(item.cor.nomeclatura).includes(
+						normalizeString(searchValue)
+					) ||
+					getAge(item.dataNascimento).includes(searchValue)
+				) {
+					return item;
+				}
+			});
+		}
+		return {};
 	};
 
 	const handleInput = (e) => {
@@ -126,6 +144,7 @@ function Registries() {
 
 	return (
 		<>
+			<NavBar />
 			<Loading show={loading} />
 			<Alert
 				show={alert.show}
@@ -134,22 +153,21 @@ function Registries() {
 				type={alert.type}
 			/>
 			<Head>
-				<title>Cadastro de Cidadão</title>
+				<title>Gestão de Cidadãos</title>
 			</Head>
 			<div className='justify-center items-center mt-5'>
 				<div className='md:grid md:grid-cols-3'>
 					<div>
 						<Description
-							title='Listagem de cidadão'
+							title='Gestão de Cidadãos'
 							desc='Procure cidadãos e edite registros.'
 						/>
 						<div className='sm:ml-7 mt-2'>
 							<CitizenForm
 								editValues={editValues}
 								submitFunction={handleSubmit}
-								buttonText={
-									Object.keys(editValues).length > 0 ? 'Editar' : 'Buscar'
-								}
+								clearFunction={clearValues}
+								buttonText={isEditing() ? 'Editar' : 'Buscar'}
 							/>
 						</div>
 					</div>
@@ -159,7 +177,6 @@ function Registries() {
 								type='text'
 								value={inputValue}
 								onChange={handleInput}
-								id='"form-subscribe-Filter'
 								className='rounded-lg w-full border-transparent flex-1 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:border-transparent'
 								placeholder='Pesquisar'
 							/>
@@ -185,14 +202,16 @@ function Registries() {
 												/>
 												<button
 													className='text-right flex justify-end'
-													onClick={() => setEditValues(convertValues(citizen))}>
+													onClick={() => setEditValues(convertValues(citizen))}
+												>
 													<svg
 														width='20'
 														fill='currentColor'
 														height='20'
 														className='hover:text-gray-800 text-gray-500'
 														viewBox='0 0 1792 1792'
-														xmlns='http://www.w3.org/2000/svg'>
+														xmlns='http://www.w3.org/2000/svg'
+													>
 														<path d='M1363 877l-742 742q-19 19-45 19t-45-19l-166-166q-19-19-19-45t19-45l531-531-531-531q-19-19-19-45t19-45l166-166q19-19 45-19t45 19l742 742q19 19 19 45t-19 45z' />
 													</svg>
 												</button>
@@ -214,4 +233,4 @@ function Registries() {
 	);
 }
 
-export default withAuth(Registries);
+export default Registries;

@@ -9,6 +9,7 @@ import {
 	useListSexQuery,
 	useListStatesQuery,
 } from '../../providers';
+import { useListDocumentType } from '../../providers/citizenProviders/listDocumentType';
 import { verifyValue } from '../../utils';
 import { Input } from './input';
 import { SelectComponent } from './select';
@@ -19,9 +20,11 @@ export function CitizenForm({
 	allRequired,
 	shouldClearValues,
 	editValues,
+	clearFunction,
 }) {
 	const [values, setValues] = useState({});
 	const { data: sexData } = useListSexQuery();
+	const { data: documentTypeData } = useListDocumentType();
 	const { data: colorsData } = useListColorsQuery();
 	const { data: reasonsData } = useListReasonsQuery();
 	const { data: benefitsData } = useListBenefitsQuery();
@@ -40,6 +43,7 @@ export function CitizenForm({
 
 	const clearValues = () => {
 		setValues({});
+		clearFunction();
 	};
 
 	useEffect(() => {
@@ -84,8 +88,8 @@ export function CitizenForm({
 		<>
 			<div className='md:col-span-3'>
 				<form onSubmit={(e) => submitFunction(e, values)}>
-					<div className='overflow-hidden mt-4 shadow sm:rounded-md md:mt-0 md:mr-8'>
-						<div className='px-4 py-5 bg-white sm:p-6 h-full'>
+					<div className='mt-4 overflow-hidden shadow sm:rounded-md md:mt-0 md:mr-8'>
+						<div className='h-full px-4 py-5 bg-white sm:p-6'>
 							<div className='grid grid-cols-6 gap-6'>
 								<Input
 									name='name'
@@ -101,6 +105,41 @@ export function CitizenForm({
 									label='Sobrenome'
 									type='text'
 									value={values.lastName}
+									required={allRequired}
+									handleChange={handleChangeInput}
+									size='md:col-span-3'
+								/>
+								<Input
+									name='nameFather'
+									label='Nome do pai'
+									type='text'
+									value={values.nameFather}
+									required={allRequired}
+									handleChange={handleChangeInput}
+									size='md:col-span-3'
+								/>
+								<Input
+									name='nameMother'
+									label='Nome da mae'
+									type='text'
+									value={values.nameMother}
+									required={allRequired}
+									handleChange={handleChangeInput}
+									size='md:col-span-3'
+								/>
+								<SelectComponent
+									label='Tipo Documento'
+									size='sm:col-span-2'
+									handleChange={(e) => handleChangeSelect(e, 'documentType')}
+									options={documentTypeData}
+									value={values.documentType}
+									required={allRequired}
+								/>
+								<Input
+									name='numberDocument'
+									label='Numero Documento'
+									type='text'
+									value={values.numberDocument}
 									required={allRequired}
 									handleChange={handleChangeInput}
 									size='md:col-span-3'
@@ -131,7 +170,7 @@ export function CitizenForm({
 										onChange={handleChangeInput}
 										required={allRequired}
 										value={values.birthday === undefined ? '' : values.birthday}
-										className='block mt-1 w-full rounded-md border-gray-300 shadow-sm cursor-pointer focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+										className='block w-full mt-1 border-gray-300 cursor-pointer rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
 									/>
 								</div>
 								<SelectComponent
@@ -172,7 +211,7 @@ export function CitizenForm({
 								/>
 								<SelectComponent
 									label='Quer sair das ruas?'
-									size='sm:col-span-2'
+									size='lg:col-span-3'
 									handleChange={(e) => handleChangeSelect(e, 'getOut')}
 									options={'yesAndNo'}
 									required={allRequired}
@@ -180,7 +219,7 @@ export function CitizenForm({
 								/>
 								<SelectComponent
 									label='Motivos para estar na rua:'
-									size='lg:col-span-4'
+									size='lg:col-span-3'
 									handleChange={(e) => handleChangeSelect(e, 'reasons')}
 									options={reasonsData}
 									isMulti
@@ -189,7 +228,7 @@ export function CitizenForm({
 								/>
 								<SelectComponent
 									label='Caso especial?'
-									size='sm:col-span-2'
+									size='lg:col-span-3'
 									handleChange={(e) => handleChangeSelect(e, 'isEspecialCase')}
 									options={'yesAndNo'}
 									required={allRequired}
@@ -197,7 +236,7 @@ export function CitizenForm({
 								/>
 								<SelectComponent
 									label='Se sim, quais casos?'
-									size='lg:col-span-4'
+									size='lg:col-span-3'
 									handleChange={(e) => handleChangeSelect(e, 'especialCases')}
 									options={especialCasesData}
 									isDisabled={verifyValue(values.isEspecialCase)}
@@ -214,7 +253,7 @@ export function CitizenForm({
 								/>
 								<SelectComponent
 									label='Recebe benefício?'
-									size='sm:col-span-2'
+									size='lg:col-span-3'
 									handleChange={(e) => handleChangeSelect(e, 'hasBenefits')}
 									options={'yesAndNo'}
 									required={allRequired}
@@ -222,7 +261,7 @@ export function CitizenForm({
 								/>
 								<SelectComponent
 									label='Se sim, quais benefícios?'
-									size='lg:col-span-4'
+									size='lg:col-span-3'
 									handleChange={(e) => handleChangeSelect(e, 'benefits')}
 									options={benefitsData}
 									isDisabled={verifyValue(values.hasBenefits)}
@@ -240,12 +279,14 @@ export function CitizenForm({
 							<button
 								type='button'
 								onClick={() => clearValues()}
-								className='inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-gray-700 rounded-md border border-transparent shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-3'>
+								className='inline-flex justify-center px-4 py-2 mr-3 text-sm font-medium text-white bg-gray-700 border border-transparent rounded-md shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+							>
 								Limpar
 							</button>
 							<button
 								type='submit'
-								className='inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-gray-700 rounded-md border border-transparent shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
+								className='inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-gray-700 border border-transparent rounded-md shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+							>
 								{buttonText ? buttonText : 'Cadastrar'}
 							</button>
 						</div>

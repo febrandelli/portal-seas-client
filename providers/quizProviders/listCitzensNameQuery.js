@@ -1,15 +1,14 @@
 import { Requests } from '../../utils';
 import { useQuery } from 'react-query';
 
-export function useListStatesQuery() {
-	const listStates = async () => {
+export function useListCitzensNameQuery() {
+	const listCitzensName = async () => {
 		return Requests({
-			url: 'estado',
+			url: 'search/cidadaos',
 			type: 'get',
 		});
 	};
-
-	return useQuery('listStates', listStates, {
+	return useQuery('listCitzensName', listCitzensName, {
 		refetchOnWindowFocus: false,
 	});
 }

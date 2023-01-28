@@ -1,21 +1,22 @@
-//Libs
 import { useEffect, useState } from 'react';
-//Components
+
 import { Alert, Description, Loading, NavBar } from '../../components';
 import Head from 'next/head';
-import { useCreateCitizenQuery } from '../../providers/citizenProviders/createCitizenQuery';
-import { CitizenForm } from '../../components/form';
+import { QuizForm } from '../../components/form/quizForm';
+import { useCreateQuizQuery } from '../../providers/quizProviders/createQuizQuery';
 
-function Dashboard() {
+function Quiz() {
 	const [values, setValues] = useState({});
-	const [alert, setAlert] = useState({ show: false });
 	const [loading, setLoading] = useState(false);
+	const [alert, setAlert] = useState({ show: false });
 	const [clear, setClear] = useState(false);
-	const { refetch: createRefetch } = useCreateCitizenQuery(values);
+
+	const { refetch: createRefetch } = useCreateQuizQuery(values);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			const newFetch = await createRefetch();
+			console.log(newFetch);
 			if (newFetch.data.status === 200 && newFetch.isSuccess) {
 				setAlert({
 					show: true,
@@ -59,17 +60,14 @@ function Dashboard() {
 				type={alert.type}
 			/>
 			<Head>
-				<title>Cadastro de Cidadão</title>
+				<title>Questionario</title>
 			</Head>
 			<div className='justify-center items-center mt-10'>
 				<div className='md:grid md:grid-cols-4 md:gap-6'>
-					<Description
-						title='Cadastro de cidadão'
-						desc='Preencha as informações necessárias para cadastrar um cidadão.'
-					/>
-					<CitizenForm
+					<Description title='Formulario de Abordagem' desc='Equipe SEAS.' />
+					<QuizForm
 						submitFunction={handleSubmit}
-						allRequired={true}
+						allRequired={false}
 						shouldClearValues={clear}
 						clearFunction={clearValues}
 					/>
@@ -79,4 +77,4 @@ function Dashboard() {
 	);
 }
 
-export default Dashboard;
+export default Quiz;

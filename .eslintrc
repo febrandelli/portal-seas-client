@@ -10,6 +10,7 @@
 		"no-alert": "warn",
 		"eqeqeq": "error",
 		"prefer-const": "error",
-		"no-use-before-define": "error"
+		"no-use-before-define": "error",
+		"react-hooks/exhaustive-deps": "off"
 	}
 }

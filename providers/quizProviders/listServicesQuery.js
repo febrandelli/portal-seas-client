@@ -1,15 +1,14 @@
 import { Requests } from '../../utils';
 import { useQuery } from 'react-query';
 
-export function useListStatesQuery() {
-	const listStates = async () => {
+export function useListServicesQuery() {
+	const listServices = async () => {
 		return Requests({
-			url: 'estado',
+			url: 'search/services',
 			type: 'get',
 		});
 	};
-
-	return useQuery('listStates', listStates, {
+	return useQuery('listServices', listServices, {
 		refetchOnWindowFocus: false,
 	});
 }

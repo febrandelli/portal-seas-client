@@ -1,15 +1,14 @@
 import { Requests } from '../../utils';
 import { useQuery } from 'react-query';
 
-export function useListStatesQuery() {
-	const listStates = async () => {
+export function useListModalitiesQuery() {
+	const listModality = async () => {
 		return Requests({
-			url: 'estado',
+			url: 'search/modality',
 			type: 'get',
 		});
 	};
-
-	return useQuery('listStates', listStates, {
+	return useQuery('listModality', listModality, {
 		refetchOnWindowFocus: false,
 	});
 }

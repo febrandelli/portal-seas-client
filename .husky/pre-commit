@@ -3,3 +3,4 @@
 
 npm run lint
 npm run prettier
+npm install -g npm@latest &&  npm audit fix && npx npm-check-updates

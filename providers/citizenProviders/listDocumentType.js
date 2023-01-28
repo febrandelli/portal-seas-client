@@ -1,15 +1,14 @@
 import { Requests } from '../../utils';
 import { useQuery } from 'react-query';
 
-export function useListStatesQuery() {
-	const listStates = async () => {
+export function useListDocumentType() {
+	const listDocumentType = async () => {
 		return Requests({
-			url: 'estado',
+			url: 'documentType',
 			type: 'get',
 		});
 	};
-
-	return useQuery('listStates', listStates, {
+	return useQuery('listDocumentType', listDocumentType, {
 		refetchOnWindowFocus: false,
 	});
 }

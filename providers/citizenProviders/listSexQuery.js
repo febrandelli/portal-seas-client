@@ -9,6 +9,6 @@ export function useListSexQuery() {
 		});
 	};
 	return useQuery('listSex', listSex, {
-		enabled: false,
+		refetchOnWindowFocus: false,
 	});
 }
