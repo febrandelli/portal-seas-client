@@ -1,8 +1,8 @@
-import { convertValues, Requests } from '../../utils';
+import { CitizenConvertValues, Requests } from '../../utils';
 import { useQuery } from 'react-query';
 
 export function useUpdateCitizenQuery(values) {
-	values = convertValues(values, true);
+	values = CitizenConvertValues(values, true);
 	const updateCitizen = async () => {
 		return Requests({
 			url: 'cidadao/' + values.id,

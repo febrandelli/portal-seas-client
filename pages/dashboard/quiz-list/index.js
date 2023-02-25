@@ -1,40 +1,31 @@
-import { useListCitizensQuery } from '../../providers/citizenProviders/listCitizensQuery';
+import { useListQuizQuery } from '../../../providers/quizProviders/listQuizQuery';
 import Head from 'next/head';
-import { Alert, Description, Loading, NavBar } from '../../components';
-import {
-	normalizeString,
-	usePrevious,
-	CitizenConvertValues,
-	getAge,
-} from '../../utils';
+import { Alert, Description, Loading, NavBar } from '../../../components';
+import { getAge, normalizeString, usePrevious } from '../../../utils';
 import { useEffect, useState } from 'react';
-import { Pagination } from '../../components/list/pagination';
-import { ListItem } from '../../components/list/listItem';
-import { CitizenForm } from '../../components/form';
-import { useUpdateCitizenQuery } from '../../providers/citizenProviders/updateCitizenQuery';
+import { Pagination } from '../../../components/list/pagination';
+import { ListItem } from '../../../components/list/listItem';
+import Link from 'next/link';
 
-function Registries() {
-	const [citizensList, setCitizensList] = useState([]);
+export default function QuizList() {
+	const [quizList, setQuizList] = useState([]);
 	const [loading, setLoading] = useState(false);
-	const [values, setValues] = useState({});
+	const [values] = useState({});
 	const prevValues = usePrevious(values);
-	const [editValues, setEditValues] = useState({});
+	const [editValues] = useState({});
 	const [alert, setAlert] = useState({ show: false });
 	const [pages, setPages] = useState(1);
 	const [selectedPage, setSelectedPage] = useState(1);
 	const [inputValue, setInputValue] = useState('');
-	const { data, isSuccess, refetch } = useListCitizensQuery(
-		selectedPage,
-		values
-	);
-	const { refetch: updateCitizen } = useUpdateCitizenQuery(values);
+	const { data, isSuccess, refetch } = useListQuizQuery(selectedPage, values);
+	// const {refetch: updateQuiz} = useUpdateQuizQuery();
 
 	useEffect(() => {
 		if (isSuccess && data.success) {
-			setCitizensList(data.data.content);
+			setQuizList(data.data.content);
 			return setPages(data.data.totalPages);
 		}
-		setCitizensList([]);
+		setQuizList([]);
 		return setPages(1);
 	}, [isSuccess, data]);
 
@@ -51,37 +42,17 @@ function Registries() {
 		return Object.keys(editValues).length > 0;
 	};
 
-	const clearValues = () => {
-		setValues({});
-		setEditValues({});
-	};
-
 	useEffect(() => {
 		const fetchData = async () => {
 			setLoading(true);
-			if (isEditing() && values.name) {
-				const updateCitizenFetch = await updateCitizen();
-				if (updateCitizenFetch.data.success) {
-					setAlert({
-						show: true,
-						label: 'Cidadão editado com sucesso.',
-						type: 'Sucesso',
-					});
-				} else {
-					setAlert({
-						show: true,
-						label: 'Não foi possível editar o cidadão.',
-					});
-				}
-			}
 			const newFetch = await refetch();
-			if (!newFetch.data.success && !isEditing()) {
+			if (!newFetch.data.success) {
 				setAlert({
 					show: true,
 					label:
 						newFetch.data.status === 404
-							? 'Nenhum cidadão encontrado.'
-							: 'Não foi possível buscar pelos cidadãos.',
+							? 'Nenhum Questionario encontrado.'
+							: 'Não foi possível buscar pelos questionarios.',
 					type: 'Erro',
 				});
 			}
@@ -90,26 +61,28 @@ function Registries() {
 		if (prevValues && values !== prevValues) {
 			fetchData();
 		}
-	}, [isEditing, prevValues, refetch, updateCitizen, values]);
+	}, [isEditing, prevValues, refetch, values]);
 
-	const filteredCitizensList = (searchValue) => {
+	const filteredQuizList = (searchValue) => {
 		if (data.success) {
 			return data.data.content.filter((item) => {
 				if (
-					normalizeString(item.nome).includes(normalizeString(searchValue)) ||
-					normalizeString(item.cidadeNascimento.nome).includes(
+					normalizeString(item.cidadao.nome).includes(
 						normalizeString(searchValue)
 					) ||
-					normalizeString(item.cidadeNascimento.estado.nome).includes(
+					normalizeString(item.local).includes(normalizeString(searchValue)) ||
+					normalizeString(item.motivoAbordagem).includes(
 						normalizeString(searchValue)
 					) ||
-					normalizeString(item.sexo.nomeclatura).includes(
+					normalizeString(
+						item.numeroChamado === null || item.numeroChamado === 'null'
+							? 'Não Informado'
+							: item.numeroChamado
+					).includes(normalizeString(searchValue)) ||
+					normalizeString(item.responsaveisPreenchimento[0]).includes(
 						normalizeString(searchValue)
 					) ||
-					normalizeString(item.cor.nomeclatura).includes(
-						normalizeString(searchValue)
-					) ||
-					getAge(item.dataNascimento).includes(searchValue)
+					getAge(item.cidadao.dataNascimento).includes(searchValue)
 				) {
 					return item;
 				}
@@ -121,9 +94,9 @@ function Registries() {
 	const handleInput = (e) => {
 		setInputValue(e.target.value);
 		if (e.target.value !== '') {
-			setCitizensList(filteredCitizensList(e.target.value));
+			setQuizList(filteredQuizList(e.target.value));
 		} else {
-			setCitizensList(data.data.content);
+			setQuizList(data.data.content);
 		}
 	};
 
@@ -137,11 +110,6 @@ function Registries() {
 		setSelectedPage(page);
 	};
 
-	const handleSubmit = (e, formValues) => {
-		e.preventDefault();
-		setValues(formValues);
-	};
-
 	return (
 		<>
 			<NavBar />
@@ -153,26 +121,18 @@ function Registries() {
 				type={alert.type}
 			/>
 			<Head>
-				<title>Gestão de Cidadãos</title>
+				<title>Gestão de Questionarios</title>
 			</Head>
 			<div className='justify-center items-center mt-5'>
 				<div className='md:grid md:grid-cols-3'>
-					<div>
-						<Description
-							title='Gestão de Cidadãos'
-							desc='Procure cidadãos e edite registros.'
-						/>
-						<div className='sm:ml-7 mt-2'>
-							<CitizenForm
-								editValues={editValues}
-								submitFunction={handleSubmit}
-								clearFunction={clearValues}
-								buttonText={isEditing() ? 'Editar' : 'Buscar'}
-							/>
-						</div>
-					</div>
-					<div className='md:col-span-2 mx-3'>
+					<div className='md:col-span-3 mx-3 mb-3'>
 						<div className='sm:w-max w-auto lg:w-full h-auto bg-white rounded-lg shadow my-2 justify-center items-center flex'>
+							<div>
+								<Description
+									title='Gestão de Questionarios'
+									desc='Procure questionarios e edite registros.'
+								/>
+							</div>
 							<input
 								type='text'
 								value={inputValue}
@@ -181,30 +141,37 @@ function Registries() {
 								placeholder='Pesquisar'
 							/>
 						</div>
-						<div className='sm:w-full h-max overflow-y-auto justify-center bg-white rounded-lg shadow'>
+						<div className='sm:w-full h-max overflow-y-auto justify-center bg-white rounded-lg shadow mt-5'>
 							<ul className='divider divide-y h-max'>
-								{citizensList.map((citizen) => {
+								{quizList.map((quiz) => {
 									return (
-										<li key={citizen.id}>
+										<li key={quiz.id}>
 											<div className='select-none cursor-pointer flex flex-1 p-4'>
 												<ListItem
-													title={citizen.nome}
-													subtitle={'Idade: ' + getAge(citizen.dataNascimento)}
+													title={quiz.cidadao.nome}
+													subtitle={
+														'Idade: ' + getAge(quiz.cidadao.dataNascimento)
+													}
 												/>
 												<ListItem
-													title={citizen.cidadeNascimento.estado.nome}
-													subtitle={citizen.cidadeNascimento.nome}
+													title={quiz.local}
+													subtitle={
+														quiz.motivoAbordagem +
+														' - ' +
+														(quiz.numeroChamado === null ||
+														quiz.numeroChamado === 'null'
+															? 'Não Informado'
+															: quiz.numeroChamado)
+													}
 												/>
 												<ListItem
 													className='sm:hidden'
-													title={citizen.sexo.nomeclatura}
-													subtitle={citizen.cor.nomeclatura}
+													title={'Responsavel Preenchimento'}
+													subtitle={quiz.responsaveisPreenchimento[0]}
 												/>
-												<button
+												<Link
 													className='text-right flex justify-end'
-													onClick={() =>
-														setEditValues(CitizenConvertValues(citizen))
-													}
+													href={'/dashboard/quiz-detail/' + quiz.id}
 												>
 													<svg
 														width='20'
@@ -216,7 +183,7 @@ function Registries() {
 													>
 														<path d='M1363 877l-742 742q-19 19-45 19t-45-19l-166-166q-19-19-19-45t19-45l531-531-531-531q-19-19-19-45t19-45l166-166q19-19 45-19t45 19l742 742q19 19 19 45t-19 45z' />
 													</svg>
-												</button>
+												</Link>
 											</div>
 										</li>
 									);
@@ -234,5 +201,3 @@ function Registries() {
 		</>
 	);
 }
-
-export default Registries;
