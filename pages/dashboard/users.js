@@ -6,15 +6,18 @@ import { ListItem } from '../../components/list/listItem';
 import { useState, useEffect } from 'react';
 import { useListUsersQuery } from '../../providers';
 import { normalizeString } from '../../utils';
+import {useCreateUserQuery} from "../../providers/userProviders/createUserQuery";
 
 export default function Users() {
 	const [alert, setAlert] = useState({ show: false });
-	const [loading] = useState(false);
-	// const [values, setValues] = useState({});
+	const [values, setValues] = useState({});
 	const [isSignUp, setIsSignUp] = useState(false);
 	const [inputValue, setInputValue] = useState('');
 	const [usersData, setUsersData] = useState([]);
-	const { data, isSuccess } = useListUsersQuery();
+	const { data, isSuccess, refetch } = useListUsersQuery();
+	const { refetch: createRefetch } = useCreateUserQuery(values);
+	const [loading, setLoading] = useState(false);
+	const [clear, setClear] = useState(false);
 
 	useEffect(() => {
 		if (isSuccess && data.success) {
@@ -22,14 +25,47 @@ export default function Users() {
 		}
 	}, [data, isSuccess]);
 
-	// const clearValues = () => {
-	// 	setValues({});
-	// };
+	useEffect(() => {
+		const fetchData = async () => {
+		const newFetch = await createRefetch();
+		if (
+			(newFetch.data.status === 200 || newFetch.data.status === 201) &&
+			newFetch.isSuccess
+		) {
+			setAlert({
+				show: true,
+				type: 'Sucesso',
+				label: 'Cadastro realizado com sucesso.',
+			});
+			setClear(true);
 
-	// const handleSubmit = (e, formValues) => {
-	// 	e.preventDefault();
-	// 	setValues(formValues);
-	// };
+			await refetch();
+		} else {
+			setAlert({
+				show: true,
+				label: 'Não foi possível realizar o cadastro.',
+				type: 'Erro',
+			});
+		}
+		setLoading(false);
+		setClear(false);
+		};
+
+		if (values.email) {
+			fetchData();
+		}
+
+	}, [createRefetch, values]);
+
+	const clearValues = () => {
+		setValues({});
+	};
+
+	const handleSubmit = (e, formValues) => {
+		e.preventDefault();
+		setValues(formValues)
+		setLoading(true);
+	};
 
 	const filteredUsersList = (searchValue) => {
 		if (data.success) {
@@ -75,11 +111,12 @@ export default function Users() {
 						/>
 						<div className='sm:ml-7 mt-4'>
 							<UserForm
-								// submitFunction={handleSubmit}
-								// clearFunction={clearValues}
+								submitFunction={handleSubmit}
+								clearFunction={clearValues}
 								isSignUp={isSignUp}
 								allRequired={isSignUp}
 								setIsSignUp={() => setIsSignUp(!isSignUp)}
+								shouldClearValues={clear}
 							/>
 						</div>
 					</div>
@@ -97,7 +134,7 @@ export default function Users() {
 							<ul className='divider divide-y h-max'>
 								{usersData.map((user) => {
 									return (
-										<li key={1}>
+										<li key={user.id}>
 											<div className='select-none cursor-pointer flex flex-1 p-4'>
 												<ListItem
 													title={user.nomeCompleto}
