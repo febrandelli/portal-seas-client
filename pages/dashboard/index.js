@@ -16,7 +16,10 @@ function Dashboard() {
 	useEffect(() => {
 		const fetchData = async () => {
 			const newFetch = await createRefetch();
-			if (newFetch.data.status === 200 && newFetch.isSuccess) {
+			if (
+				(newFetch.data.status === 200 || newFetch.data.status === 201) &&
+				newFetch.isSuccess
+			) {
 				setAlert({
 					show: true,
 					type: 'Sucesso',

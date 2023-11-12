@@ -104,7 +104,7 @@ export function QuizForm({
 									value={values.place}
 									handleChange={handleChangeInput}
 									required={allRequired}
-									size='col-span-3 md:col-span-2'
+									size='lg:col-span-3 md:col-span-2'
 								/>
 								<SelectComponent
 									label='Motivo abordagem'
@@ -121,7 +121,7 @@ export function QuizForm({
 									value={values.reasonApproachNumber}
 									handleChange={handleChangeInput}
 									required={allRequired}
-									size='col-span-3 md:col-span-2'
+									size='lg:col-span-3 md:col-span-2'
 								/>
 								<SelectComponent
 									label='Estado de Origem'
@@ -243,7 +243,7 @@ export function QuizForm({
 									value={values.isanotherService}
 								/>
 								<Input
-									name='anotherServices'
+									name='anotherService'
 									label='Se sim, qual serviço?'
 									type='text'
 									size='lg:col-span-3'

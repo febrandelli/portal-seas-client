@@ -1,4 +1,4 @@
-import { convertValues, Requests } from '../../utils';
+import { CitizenConvertValues, Requests } from '../../utils';
 import { useQuery } from 'react-query';
 
 export function useListCitizensQuery(page, values) {
@@ -7,7 +7,7 @@ export function useListCitizensQuery(page, values) {
 	} else {
 		page = page - 1;
 	}
-	values = convertValues(values, true);
+	values = CitizenConvertValues(values, true);
 	delete values.id;
 	const listCitizens = async () => {
 		return Requests({

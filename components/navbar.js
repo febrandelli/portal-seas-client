@@ -8,9 +8,10 @@ import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import { LogOut } from '../utils';
 
 const navigation = [
-	{ name: 'Cadastro de Cidadão', href: '/dashboard', index: true },
-	{ name: 'Cadastro de Questionario', href: '/dashboard/quiz' },
+	{ name: 'Questionarios', href: '/dashboard/quiz-list' },
 	{ name: 'Cidadãos', href: '/dashboard/registries' },
+	{ name: 'Cadastro de Questionario', href: '/dashboard/quiz' },
+	{ name: 'Cadastro de Cidadão', href: '/dashboard', index: true },
 	{ name: 'Usuários', href: '/dashboard/users' },
 ];
 

@@ -2,7 +2,13 @@ import { verifyValue } from './fluentValidator';
 
 const getIdsOnly = (array) => {
 	const newArray = [];
-	array.forEach((e) => newArray.push(e.id));
+	array.forEach((e) => newArray.push(parseInt(e.id)));
+	return newArray;
+};
+
+const getIdsOnlyAndParseToString = (array) => {
+	const newArray = [];
+	array.forEach((e) => newArray.push(e.id.toString()));
 	return newArray;
 };
 
@@ -20,7 +26,7 @@ const handleGetOut = (getOut) => {
 	return getOut;
 };
 
-export const convertValues = (values, send) => {
+export const CitizenConvertValues = (values, send) => {
 	if (send) {
 		return {
 			id: values.id,
@@ -63,6 +69,68 @@ export const convertValues = (values, send) => {
 		isEspecialCase: values.casosEspeciais.length > 0 ? 'Sim' : 'Não',
 		hasBenefits: values.beneficios.length > 0 ? 'Sim' : 'Não',
 	};
+};
+
+export const QuizConvertValues = (values, send) => {
+	if (values.cidadao) {
+		if (send) {
+			return {
+				id: values.id,
+				cidadao: values.idCitzen,
+				numeroChamado: values.reasonApproachNumber,
+				motivoAbordagem: values.reasonApproach,
+				dtInsert: values.dtInsert,
+				dtUpdate: values.dtUpdate,
+			};
+		}
+		const cidadao = values.cidadao;
+
+		return {
+			id: values.id,
+			idCitzen: [cidadao.id.toString()],
+			place: values.local,
+			reasonApproach: values.motivoAbordagem,
+			reasonApproachNumber: values.numeroChamado,
+			state: values.cidadeOrigem.estado.id,
+			city: values.cidadeOrigem.id,
+			circulationAroundTheCity: values.circulacaoPelaCidade,
+			timeInJundiai: values.tempoJundiai,
+			timeLivingOnTheStreet: values.tempoSituacaoRua,
+			howSeeYourselfInAndOutStreet: values.comoSeVeNaRuaEFora,
+			lifeProject: values.projetoDeVida,
+			services: getIdsOnlyAndParseToString(values.servicoBuscaJundiai),
+			compositeTeam: values.equipeComposta,
+			isanotherService: values.servicoAcionado ? 'Sim' : 'Não',
+			anotherService: values.servicoAcionado,
+			peopleApproached: values.qtPessoasAbordadas,
+			peopleViewed: values.qtPessoasVisualizadas,
+			describe: values.relatoAbordagem,
+			note: values.observacao,
+			orientation: values.orientacao,
+			sendTo: values.encaminhamento,
+			satisfaction: values.satisfaction,
+
+			// local: values.place,
+			// motivoAbordagem: values.reasonApproach,
+			// numeroChamado: values.reasonApproachNumber,
+			// circulacaoPelaCidade: values.circulationAroundTheCity,
+			// tempoJundiai: values.timeInJundiai,
+			// tempoSituacaoDeRua: values.timeLivingOnTheStreet,
+			// comoSeVeNaRuaEFora: values.howSeeYourselfInAndOutStreet,
+			// projetoDeVida: values.lifeProject,
+			// servicoBuscaJundiai: values.services ? returnArray(values.services) : [],
+			// combinados: 'Precisa implementar',
+			// equipeComposta: values.compositeTeam,
+			//
+			// descricao: values.describe,
+			// acionouOutroServico: values.anotherService,
+			// orientacoes: values.orientation,
+			// encaminhadoPara: values.sendTo,
+			// pesquisaDeSatisfacao: values.satisfaction,
+			// observacao: values.note,
+			// responsaveisPreenchimento: ["Felipe Brandelli"],
+		};
+	}
 };
 
 export const getAge = (year) => {
