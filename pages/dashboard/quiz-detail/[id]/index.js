@@ -15,6 +15,13 @@ export default function Index() {
 	const [values, setValues] = useState({});
 	const [quiz, setQuiz] = useState({});
 	const { data, isSuccess, refetch: createRefetch } = useGetQuizQuery(values);
+	const isEditing = () => {
+		let isEditing = true
+		if (!id) {
+			isEditing = false;
+		}
+		return isEditing;
+	}
 
 	useEffect(() => {
 		if (!id) {
@@ -54,7 +61,7 @@ export default function Index() {
 								editValues={quiz}
 								// submitFunction={}
 								// clearFunction={clearValues}
-								// buttonText={isEditing() ? 'Editar' : 'Buscar'}
+								buttonText={isEditing() ? 'Atualizar' : 'Salvar'}
 							/>
 						</div>
 					</div>
